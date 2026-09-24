@@ -1,0 +1,42 @@
+# keeps the NFL PowerScore site current: every morning it pulls new games from nflverse, rebuilds the features,
+# refits the model and deploys the webapp folder to GitHub Pages. It also runs on every push and on demand.
+name: Deploy site
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 11:00 UTC = 6-7 AM Eastern, after the previous night's games are posted
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      # finished seasons are committed in data/seasons, so only the current season's play-by-play is downloaded
+      - name: Update data and model
+        run: python -m src.nflmodel.run --daily
+        env:
+          PYTHONUNBUFFERED: "1"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: webapp
+      - id: deployment
+        uses: actions/deploy-pages@v4

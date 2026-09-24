@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nfl-webapp",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5001", "--directory", "C:/Projects/NFL_Predictions/webapp"],
+      "port": 5001
+    }
+  ]
+}

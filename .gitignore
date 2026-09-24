@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+# rebuilt on every run
+data/raw/
+data/features.csv
+data/team_state.csv
+data/qb_state.csv
+data/game_model.pkl
+data/backtest_recent.csv

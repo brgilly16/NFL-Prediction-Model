@@ -1,0 +1,6 @@
+pandas==2.3.3
+numpy==2.3.4
+scipy==1.16.3
+scikit-learn==1.7.2
+requests==2.32.5
+pyarrow==22.0.0
